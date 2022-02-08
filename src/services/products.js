@@ -1,5 +1,5 @@
 import { Router } from "express";
-import pool from "../utild/db/connect";
+import pool from "../utils/db/connect.js";
 const productsRouter = Router();
 
 productsRouter.get("/", async (req, res, next) => {
@@ -24,6 +24,17 @@ productsRouter.get("/product_id", async (req, res, next) => {
     res.status(500).send({ message: error.message });
   }
 });
+productsRouter.post("/", async (req, res, next) => {
+    try {
+      const result = await pool.query(
+        `INSERT INTO products(product_name,product_description,product_brand,product_price,product_category) VALUES($1,$2,$3,$4,$5) RETURNING *;`,
+        [req.body.product_name, req.body.product_description, req.body.product_brand, req.body.product_price, req.body.product_category]
+      );
+      res.send(result.rows[0]);
+    } catch (error) {
+      res.status(500).send({ message: error.message });
+    }
+  });
 productsRouter.put("/:product_id",async(req,res,next)=>{
     try {
         const result =await pool.query(`UPDATE products SET  product_name=$1,product_description=$2  product_brand =$3 product_price=$4 product_category=$5 WHERE product_id=$6 RETURNING * ;`,
