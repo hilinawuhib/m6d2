@@ -27,7 +27,7 @@ reviewsRouter.get("/:review_id", async (req, res, next) => {
 reviewsRouter.post("/", async (req, res, next) => {
     try {
       const result = await pool.query(
-        `INSERT INTO blogs(comments,rate,product_id) VALUES($1,$2,$3) RETURNING *;`,
+        `INSERT INTO reviews(comments,rate,product_id) VALUES($1,$2,$3) RETURNING *;`,
         [req.body.comments, req.body.rate, req.body.product_id]
       );
       res.send(result.rows[0]);
