@@ -37,8 +37,8 @@ reviewsRouter.post("/", async (req, res, next) => {
   });
 reviewsRouter.put("/:review_id",async(req,res,next)=>{
     try {
-        const result =await pool.query(`UPDATE reviews SET  review_name=$1,review_description=$2  review_brand =$3 review_price=$4 review_category=$5 WHERE review_id=$6 RETURNING * ;`,
-        [req.body.review_name, req.body.review_description, req.body.review_brand, req.body.review_price, req.body.review_category, req.params.review_id]
+        const result =await pool.query(`UPDATE reviews SET  comments=$1,rate=$2  WHERE review_id=$3 RETURNING * ;`,
+        [req.body.comments, req.body.rate, req.params.review_id]
         );
         res.send(result.rows[0]);
         
@@ -47,11 +47,11 @@ reviewsRouter.put("/:review_id",async(req,res,next)=>{
     }
 });
  reviewsRouter.delete("/:review_id", async (req, res, next)=>{
-     try { await pool.query(`DELETE FROM authors WHERE review_id=$1;`,
+     try { await pool.query(`DELETE FROM reviews WHERE review_id=$1;`,
     [req.params.review_id, ] )
     res.status(204).send();
 } catch (error) {
   res.status(500).send({ message: error.message });
 }
 });
-export default reviewsRouter
+export default reviewsRouter;
