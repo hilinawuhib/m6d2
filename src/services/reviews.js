@@ -4,13 +4,13 @@ const reviewsRouter = Router();
 
 reviewsRouter.get("/", async (req, res, next) => {
   try {
-    const result = await pool.query( `SELECT * FROM blogs JOIN products ON reviews.product_id=products.product_id;`);
+    const result = await pool.query( `SELECT * FROM reviews JOIN products ON reviews.product_id=products.product_id;`);
     res.send(result.rows);
   } catch (error) {
     res.status(500).send({ message: error.message });
   }
 });
-reviewsRouter.get("/:review_id", async (req, res, next) => {
+reviewsRouter.get("/review_id", async (req, res, next) => {
   try {
     const result = await pool.query( `SELECT * FROM reviews JOIN products ON reviews.product_id=products.product_id WHERE review_id=$1;`,
     [req.params.review_id]);
